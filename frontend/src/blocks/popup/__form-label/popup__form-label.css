@@ -1,0 +1,10 @@
+.popup__form-label {
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.popup__form-label:last-of-type {
+  margin-bottom: 48px;
+}

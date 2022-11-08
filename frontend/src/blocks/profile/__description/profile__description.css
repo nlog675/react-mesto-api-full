@@ -1,0 +1,23 @@
+.profile__description {
+    margin: 0;
+    margin-top: 16px;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.22;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 300px;
+}
+
+@media screen and (max-width: 424px) {
+    .profile__description {
+        font-size: 14px;
+        line-height: 1.2;
+        max-width: 190px;
+        margin-top: 10px;
+    }
+}
+
+/* отступы не по макету сделаны специально,
+    чтобы попасть в pixelperfect */
