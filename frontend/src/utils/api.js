@@ -1,14 +1,13 @@
-import { apiConfig } from "./constants";
-
-export default class Api {
-  constructor(apiConfig) {
-    this._getResponse = this._getResponse.bind(this);
-    this._headers = apiConfig.headers;
-    this._url = apiConfig.url;
+class Api {
+  constructor(url, headers) {
+    // this._getResponse = this._getResponse.bind(this);
+    this._headers = headers;
+    this._url = url;
   }
 
   _getResponse(res) {
     if (res.ok) {
+      console.log(res)
       return res.json();
     }
 
@@ -18,18 +17,19 @@ export default class Api {
   getProfile() {
     return fetch(`${this._url}/users/me`, {
       method: 'GET',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include',
     })
-    .then((res) => this._getResponse(res))
+    .then(this._getResponse)
   }
 
   getCard() {
     return fetch(`${this._url}/cards`, {
-      credentials: 'omit',
       method: 'GET',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include',
     })
-    .then((res) => this._getResponse(res))
+    .then(this._getResponse)
   }
 
   editProfile(data) {
@@ -39,9 +39,10 @@ export default class Api {
       body: JSON.stringify({
         name: data.name,
         about: data.about
-      })
+      }),
+      credentials: 'include',
     })
-    .then((res) => this._getResponse(res))
+    .then(this._getResponse)
   }
 
   addCard(data) {
@@ -51,33 +52,37 @@ export default class Api {
       body: JSON.stringify({
         name: data.name,
         link: data.link
-      })
+      }),
+      credentials: 'include',
     })
-    .then((res) => this._getResponse(res))
+    .then(this._getResponse)
   }
 
   likeCard(id) {
     return fetch(`${this._url}/cards/${id}/likes`, {
       method: 'PUT',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include',
     })
-    .then((res) => this._getResponse(res))
+    .then(this._getResponse)
   }
 
   dislikeCard(id) {
     return fetch(`${this._url}/cards/${id}/likes`, {
       method: 'DELETE',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include',
     })
-    .then((res) => this._getResponse(res))
+    .then(this._getResponse)
   }
 
   deleteCard(id) {
     return fetch(`${this._url}/cards/${id}`, {
       method: 'DELETE',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include',
     })
-    .then((res) => this._getResponse(res))
+    .then(this._getResponse)
   }
 
   changeAvatar(data) {
@@ -86,60 +91,16 @@ export default class Api {
       headers: this._headers,
       body: JSON.stringify({
         avatar: data
-      })
+      }),
+      credentials: 'include',
     })
-    .then((res) => this._getResponse(res))
+    .then(this._getResponse)
   }
 }
 
-export const api = new Api(apiConfig);
-
-export const BASE_URL = 'https://auth.nomoreparties.co';
-
-const request = ({
-  url,
-  method = 'POST',
-  token,
-  data
-}) => {
-  return fetch(`${BASE_URL}${url}`, {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      ...!!token && { "Authorization" : `Bearer ${token}` },
-    },
-    ...!!data && { body: JSON.stringify(data) },
-  })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject(res.status);
-    });
-}
-
-export const register = (email, password) => {
-  return request({
-    url: '/signup',
-    data: { 
-      email: email, 
-      password: password 
-    },
-  });
-};
-
-export const authorize = (email, password) => {
-  return request({
-    url: '/signin',
-    data: { email, password },
-  });
-};
-
-export const getContent = (token) => {
-  return request({
-    url: '/users/me',
-    method: 'GET',
-    token,
-  });
-};
+export const api = new Api({
+  url: 'http://localhost:4000',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});

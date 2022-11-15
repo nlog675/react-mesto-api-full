@@ -7,13 +7,14 @@ import EditProfilePopup from './EditProfilePopup';
 import AddPlacePopup from './AddPlacePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import ConfirmationPopup from './ConfirmationPopup';
-import { api, register, authorize, getContent } from '../utils/api';
+import { api } from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
 import InfoTooltip from './InfoTooltip';
+import { auth } from '../utils/Auth';
 
 function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -31,6 +32,7 @@ function App() {
     const navigate = useNavigate()
 
     useEffect(() => {
+      console.log(loggedIn);
       if (loggedIn) {
       Promise.all([api.getProfile(), api.getCard()])
           .then(([user, data]) => {
@@ -137,15 +139,14 @@ function App() {
     };
 
     const handleLogin = (email, password) => {
-      return authorize(email, password)
+      return auth.authorize(email, password)
         .then((data) => {
           
-          if (!data?.token) return;
+          if (!data?.email) return;
           
-          localStorage.setItem('jwt', data.token)
           setLoggedIn(true);
-          setUserEmail(email)
-          navigate('/')
+          setUserEmail(email);
+          navigate('/');
         })
         .catch(() => {
           setIsInfoTooltipOpen(true);
@@ -153,7 +154,7 @@ function App() {
     }
 
     const handleRegister = (email, password) => {
-      return register(email, password)
+      return auth.register(email, password)
         .then(() => {
           setRegistered(true);
           setIsInfoTooltipOpen(true);
@@ -173,13 +174,12 @@ function App() {
 
     useEffect(() => {
       const tokenCheck = () => {
-        const jwt = localStorage.getItem('jwt');
-        if (!jwt) return;
         
-        getContent(jwt)
+        auth.getContent()
           .then((res) => {
             setUserEmail(res?.data?.email);
             if (res) {
+              console.log(res);
               setLoggedIn(true);
               navigate('/');
             };
