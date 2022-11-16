@@ -23,8 +23,7 @@ class Auth{
   }
 
   authorize(email, password) {
-    debugger
-    return fetch(`${this._baseUrl}/sign-in`, {
+    return fetch(`${this._baseUrl}/signin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -44,6 +43,16 @@ class Auth{
       credentials: 'include'
     })
     .then(this._getResponse)
+  }
+
+  logout() {
+    return fetch(`${this._baseUrl}/signout`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include'
+    })
   }
 }
 

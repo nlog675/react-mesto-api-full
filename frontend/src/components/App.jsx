@@ -144,7 +144,7 @@ function App() {
         
         auth.getContent()
           .then((res) => {
-            setUserEmail(res?.data?.email);
+            setUserEmail(res?.email);
             if (res) {
               setLoggedIn(true);
               navigate('/');
@@ -159,10 +159,10 @@ function App() {
     }, []);
 
     const handleLogin = (email, password) => {
-      debugger
       return auth.authorize(email, password)
-        .then((data) => {
-          if (!data?.email) return;
+        .then((res) => {
+          console.log(res);
+          if (!res?.email) return;
           
           setLoggedIn(true);
           setUserEmail(email);
@@ -193,9 +193,14 @@ function App() {
     }, [loggedIn]);
 
     const handleLogout = () => {
-      localStorage.removeItem('jwt');
-      setLoggedIn(false);
-      setUserEmail('');
+      if (loggedIn) {
+        auth.logout()
+        .then(() => {
+          setUserEmail('');
+          setLoggedIn(false);
+          navigate('/');
+        })
+      }
     };
 
   return (

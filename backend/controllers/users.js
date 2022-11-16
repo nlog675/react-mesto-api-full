@@ -105,11 +105,18 @@ const login = (req, res, next) => {
             maxAge: 3600000 * 24 * 7,
             httpOnly: true,
           })
-            .send({ message: 'Авторизация прошла успешно' });
+            .send({ email, message: 'Авторизация прошла успешно' });
         });
     })
     .catch(next);
 };
+
+const logout = (req, res, next) => {
+  res.clearCookie('jwt')
+  .catch((err) => {
+    next(err);
+  })
+}
 
 const getUser = (req, res, next) => {
   User.findById(req.user._id)
@@ -124,5 +131,5 @@ const getUser = (req, res, next) => {
 };
 
 module.exports = {
-  getUsers, createUser, getUserById, updateProfile, updateAvatar, login, getUser,
+  getUsers, createUser, getUserById, updateProfile, updateAvatar, login, logout, getUser,
 };
