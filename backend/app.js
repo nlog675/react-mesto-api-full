@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const cors = require('./middlewares/cors');
 const { errorHandler } = require('./utils/errorHandler');
@@ -13,6 +14,7 @@ mongoose.connect(MONGO_URL);
 
 const app = express();
 
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(cors);
 app.use(requestLogger);

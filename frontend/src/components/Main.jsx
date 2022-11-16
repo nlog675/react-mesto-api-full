@@ -39,8 +39,8 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike,
                     {cards.map((data) => {
                         return(
                             <Card 
-                            key={data._id}
                             card={data}
+                            key={data._id}
                             onClick={onCardClick}
                             onCardLike={onCardLike}
                             onCardDelete={onCardDelete}

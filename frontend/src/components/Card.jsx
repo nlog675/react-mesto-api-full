@@ -3,13 +3,15 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function Card({card, onClick, onCardLike, onCardDelete}) {
   const currentUser = useContext(CurrentUserContext);
-  const isOwn = card.owner._id === currentUser._id;
+  const isOwn = (card.owner._id || card.owner) === currentUser._id;
   const cardDeleteButtonClassName = (
     `card__delete-button ${isOwn ? 'elements__card-delete_visible' : 'elements__card-delete_hidden'}`
   );
-  const isLiked = card.likes.some(i => i._id === currentUser._id);
+  const isLiked = card.likes.some(i => {
+    return i === currentUser._id
+  });
   const cardLikeButtonClassName = (
-    `elements__card-like ${isLiked ? 'elements__card-like_active' : 'elements__card-like'}`
+    `elements__card-like ${isLiked ? 'elements__card-like_active' : ''}`
   );
 
   function handleClick() {

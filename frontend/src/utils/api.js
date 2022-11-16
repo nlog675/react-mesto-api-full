@@ -1,13 +1,12 @@
 class Api {
-  constructor(url, headers) {
+  constructor(config) {
     // this._getResponse = this._getResponse.bind(this);
-    this._headers = headers;
-    this._url = url;
+    this._headers = config.headers;
+    this._url = config.url;
   }
 
   _getResponse(res) {
     if (res.ok) {
-      console.log(res)
       return res.json();
     }
 

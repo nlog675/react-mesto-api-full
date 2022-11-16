@@ -32,7 +32,6 @@ function App() {
     const navigate = useNavigate()
 
     useEffect(() => {
-      console.log(loggedIn);
       if (loggedIn) {
       Promise.all([api.getProfile(), api.getCard()])
           .then(([user, data]) => {
@@ -44,7 +43,9 @@ function App() {
   }, [loggedIn]);
 
     function handleCardLike(card) {
-      const isLiked = card.likes.some(i => i._id === currentUser._id);
+      const isLiked = card.likes.some(i => {
+        return i === currentUser._id
+      });
       
       if (!isLiked) {
         api.likeCard(card._id)
@@ -138,10 +139,29 @@ function App() {
         setIsInfoTooltipOpen(false)
     };
 
+    useEffect(() => {
+      const tokenCheck = () => {
+        
+        auth.getContent()
+          .then((res) => {
+            setUserEmail(res?.data?.email);
+            if (res) {
+              setLoggedIn(true);
+              navigate('/');
+            };
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      };
+
+      tokenCheck()
+    }, []);
+
     const handleLogin = (email, password) => {
+      debugger
       return auth.authorize(email, password)
         .then((data) => {
-          
           if (!data?.email) return;
           
           setLoggedIn(true);
@@ -171,26 +191,6 @@ function App() {
 
       navigate('/');
     }, [loggedIn]);
-
-    useEffect(() => {
-      const tokenCheck = () => {
-        
-        auth.getContent()
-          .then((res) => {
-            setUserEmail(res?.data?.email);
-            if (res) {
-              console.log(res);
-              setLoggedIn(true);
-              navigate('/');
-            };
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-      };
-
-      tokenCheck()
-    }, []);
 
     const handleLogout = () => {
       localStorage.removeItem('jwt');
