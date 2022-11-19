@@ -98,7 +98,7 @@ class Api {
 }
 
 export const api = new Api({
-  url: 'http://localhost:4000',
+  url: 'http://http://nlog675.nomoredomains.icu/',
   headers: {
     'Content-Type': 'application/json',
   },
