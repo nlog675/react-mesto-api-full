@@ -1,6 +1,6 @@
 class Auth{
   constructor() {
-    this._baseUrl = 'http://api.nlog675.nomoredomains.icu'
+    this._baseUrl = 'https://api.nlog675.nomoredomains.icu'
   }
 
   _getResponse(res) {
