@@ -1,4 +1,5 @@
 const allowedCors = [
+  'https://nlog675.nomoredomains.icu',
   'http://nlog675.nomoredomains.icu',
   'localhost:3000',
 ];
