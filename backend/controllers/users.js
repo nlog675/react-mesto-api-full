@@ -6,6 +6,7 @@ const BadRequestError = require('../utils/BadRequestError');
 const NotFoundError = require('../utils/NotFoundError');
 const ConflictError = require('../utils/ConflictError');
 const UnauthorizedError = require('../utils/UnauthorizedError');
+
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const getUsers = (req, res, next) => {
@@ -58,6 +59,7 @@ const getUserById = (req, res, next) => {
 const updateProfile = (req, res, next) => {
   const { name, about } = req.body;
 
+  // eslint-disable-next-line no-underscore-dangle
   User.findByIdAndUpdate({ _id: req.user._id }, { name, about }, { new: true, runValidators: true })
     .orFail(() => {
       throw new NotFoundError('Пользователь с указанным _id не найден.');
@@ -75,6 +77,7 @@ const updateProfile = (req, res, next) => {
 const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
+  // eslint-disable-next-line no-underscore-dangle
   User.findByIdAndUpdate({ _id: req.user._id }, { avatar }, { new: true, runValidators: true })
     .orFail(() => {
       throw new NotFoundError('Пользователь с указанным _id не найден.');
@@ -101,6 +104,7 @@ const login = (req, res, next) => {
           if (!matched) {
             throw new UnauthorizedError('Неправильный логин или пароль');
           }
+          // eslint-disable-next-line no-underscore-dangle
           const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key', { expiresIn: '7d' });
           res.cookie('jwt', token, {
             maxAge: 3600000 * 24 * 7,
@@ -114,12 +118,13 @@ const login = (req, res, next) => {
 
 const logout = (req, res, next) => {
   res.clearCookie('jwt')
-  .catch((err) => {
-    next(err);
-  })
-}
+    .catch((err) => {
+      next(err);
+    });
+};
 
 const getUser = (req, res, next) => {
+  // eslint-disable-next-line no-underscore-dangle
   User.findById(req.user._id)
     .then((user) => {
       if (user) {
