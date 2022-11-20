@@ -10,7 +10,11 @@ const { errorHandler } = require('./utils/errorHandler');
 const routes = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = 4000, MONGO_URL = 'mongodb://localhost:27017/mestodb' } = process.env;
+const {
+  PORT = 4000, MONGO_URL = 'mongodb://localhost:27017/mestodb', JWT_SECRET, NODE_ENV,
+} = process.env;
+// eslint-disable-next-line no-console
+console.log(JWT_SECRET, NODE_ENV);
 
 mongoose.connect(MONGO_URL);
 
