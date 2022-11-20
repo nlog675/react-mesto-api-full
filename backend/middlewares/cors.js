@@ -1,6 +1,8 @@
 const allowedCors = [
   'https://nlog675.nomoredomains.icu',
   'http://nlog675.nomoredomains.icu',
+  'http://localhost:3000',
+  'https://localhost:3000',
   'localhost:3000',
 ];
 
