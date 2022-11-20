@@ -14,7 +14,7 @@ const createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
     .then((card) => {
-      res.send( card );
+      res.send(card);
     })
     // eslint-disable-next-line consistent-return
     .catch((err) => {
@@ -56,7 +56,7 @@ const likeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError('Передан несуществующий _id карточки.');
       }
-      return res.send( card );
+      return res.send(card);
     })
     // eslint-disable-next-line consistent-return
     .catch((err) => {
